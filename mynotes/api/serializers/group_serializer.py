@@ -19,4 +19,7 @@ class GroupCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['name', 'image', 'members', 'owners']
+        fields = ['id', 'name', 'image', 'members', 'owners']
+        extra_kwargs = {
+            'id': {'read_only': True}
+        }
