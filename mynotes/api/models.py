@@ -56,7 +56,7 @@ class Note(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(help_text='Required. Note\'s title', unique=False, blank=False, max_length=50, validators=[MinLengthValidator(1)])
-    htmlCode = models.TextField(help_text='HTML content of the note. Includes CodeBlock.')
-    nativeCode = models.TextField(help_text='Native content of the note. Includes CodeBlock.')
+    htmlCode = models.TextField(help_text='HTML content of the note. Includes CodeBlock.', default='')
+    nativeCode = models.TextField(help_text='Native content of the note. Includes CodeBlock.', default='')
     owners = models.ManyToManyField(User, related_name='owned_notes', blank=True)
     members = models.ManyToManyField(User, related_name='notes', blank=True)

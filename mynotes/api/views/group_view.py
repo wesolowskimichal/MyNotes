@@ -23,7 +23,7 @@ class GroupListPagination(PageNumberPagination):
             'data': data
         })
 
-class GroupView(generics.ListCreateAPIView):
+class GroupListView(generics.ListCreateAPIView):
     """
     Creating new Group
     """
@@ -50,3 +50,9 @@ class GroupView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return GroupCreateUpdateSerializer
         return GroupDetailsSerializer
+    
+class GroupDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Managing Group, Owners only
+    """
+    

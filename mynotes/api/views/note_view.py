@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from api.serializers.note_serializer import *
 
@@ -51,10 +52,16 @@ class NoteView(generics.ListCreateAPIView):
             return NoteCreateSerializer
         return NoteDetailsSerializer
     
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+    
 class OwnedNoteView(generics.ListAPIView):
     """
     Searching Owned Notes
     """
+    permission_classes = [IsAuthenticated]
     serializer_class = NoteDetailsSerializer
     search_fields = ['title']
     pagination_class = NoteListPagination

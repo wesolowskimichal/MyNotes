@@ -13,7 +13,7 @@ urlpatterns = [
     path('notes/', NoteView.as_view(), name='create_note'),
     path('notes/owned/', OwnedNoteView.as_view(), name='owned_notes'),
     # User Groups
-    path('groups/', GroupView.as_view(), name='create_get_note_group'),
+    path('groups/', GroupListView.as_view(), name='group_operations'),
     # Token
     path('token/', TokenObtainPairView.as_view(), name='get_token'),
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),

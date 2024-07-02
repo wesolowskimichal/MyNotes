@@ -14,12 +14,14 @@ class GroupDetailsSerializer(serializers.ModelSerializer):
         }
 
 class GroupCreateUpdateSerializer(serializers.ModelSerializer):
-    members = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
-    owners = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
+    members_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
+    owners_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
+    members = UserDetailsSerializer(many=True, read_only=True)
+    owners = UserDetailsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group
-        fields = ['id', 'name', 'image', 'members', 'owners']
+        fields = ['id', 'name', 'image', 'members', 'owners', 'members_ids', 'owners_ids']
         extra_kwargs = {
             'id': {'read_only': True}
         }
