@@ -14,6 +14,7 @@ urlpatterns = [
     path('notes/owned/', OwnedNoteView.as_view(), name='owned_notes'),
     # User Groups
     path('groups/', GroupListView.as_view(), name='group_operations'),
+    path('groups/<uuid:id>/', GroupDetailsView.as_view(), name='group_details'),
     # Token
     path('token/', TokenObtainPairView.as_view(), name='get_token'),
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
