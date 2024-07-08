@@ -9,6 +9,8 @@ urlpatterns = [
     # User
     path('register/', UserRegisterView.as_view(), name='register'),
     path('user/', UserDetailsView.as_view(), name='user_operations'),
+    path('user/contacts/', UserContactListView.as_view(), name='user_contacts'),
+    path('user/contacts/invite/', UserContactsInvite.as_view(), name='user_contacts_invite'),
     # User Notes
     path('notes/', NoteView.as_view(), name='create_note'),
     path('notes/owned/', OwnedNoteView.as_view(), name='owned_notes'),

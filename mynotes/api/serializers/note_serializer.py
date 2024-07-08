@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from api.models import Note, User, Group
-from api.serializers.user_serializer import UserDetailsSerializer
+from api.serializers.user_serializer import UserShortSerializer
 
 
 class NoteDetailsSerializer(serializers.ModelSerializer):
-    members = UserDetailsSerializer(many=True, read_only=True)
-    owners = UserDetailsSerializer(many=True, read_only=True)
+    members = UserShortSerializer(many=True, read_only=True)
+    owners = UserShortSerializer(many=True, read_only=True)
 
     class Meta:
         model = Note
@@ -17,8 +17,8 @@ class NoteDetailsSerializer(serializers.ModelSerializer):
         }
 
 class NoteCreateSerializer(serializers.ModelSerializer):
-    members = UserDetailsSerializer(many=True, read_only=True)
-    owners = UserDetailsSerializer(many=True, read_only=True)
+    members = UserShortSerializer(many=True, read_only=True)
+    owners = UserShortSerializer(many=True, read_only=True)
     members_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False, write_only=True)
     owners_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False, write_only=True)
     member_groups_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all(), required=False, write_only=True)

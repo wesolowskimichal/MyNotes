@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from api.models import Group, User
-from api.serializers.user_serializer import UserDetailsSerializer
+from api.serializers.user_serializer import UserShortSerializer
 
 class GroupDetailsSerializer(serializers.ModelSerializer):
-    members = UserDetailsSerializer(many=True, read_only=True)
-    owners = UserDetailsSerializer(many=True, read_only=True)
+    members = UserShortSerializer(many=True, read_only=True)
+    owners = UserShortSerializer(many=True, read_only=True)
     
     class Meta:
         model = Group
@@ -14,8 +14,8 @@ class GroupDetailsSerializer(serializers.ModelSerializer):
         }
 
 class GroupCreateUpdateSerializer(serializers.ModelSerializer):
-    owners = UserDetailsSerializer(many=True, read_only=True)
-    members = UserDetailsSerializer(many=True, read_only=True)
+    owners = UserShortSerializer(many=True, read_only=True)
+    members = UserShortSerializer(many=True, read_only=True)
     members_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False, write_only=True)
     owners_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False, write_only=True)
     member_groups_ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Group.objects.all(), required=False, write_only=True)
