@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, RegexValidator
 
 class Contact(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user_from = models.ForeignKey('User', related_name='from_contacts', on_delete=models.CASCADE)
     user_to = models.ForeignKey('User', related_name='to_contacts', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
@@ -81,7 +82,7 @@ class Group(models.Model):
 
 class Note(models.Model):
     def __str__(self) -> str:
-        return ''
+        return self.title
     
     def upload_to(seelf, filename) -> str:
         return f'notes/'
