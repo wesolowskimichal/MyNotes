@@ -1,24 +1,41 @@
 from datetime import timezone
 import uuid
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator, RegexValidator
 
-class ContactRequest(models.Model):
+class Contact(models.Model):
+    user_from = models.ForeignKey('User', related_name='from_contacts', on_delete=models.CASCADE)
+    user_to = models.ForeignKey('User', related_name='to_contacts', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('user_from', 'user_to'),)
+    
+    def __str__(self) -> str:
+        return f'{self.user_from} is connected to {self.user_to}'
+
+class Invitation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(unique=False, blank=False, max_length=150)
     sender = models.ForeignKey('User', related_name='sent_requests', on_delete=models.CASCADE)
     receiver = models.ForeignKey('User', related_name='received_requests', on_delete=models.CASCADE)
-    sent_at = models.DateTimeField()
+    sent_at = models.DateTimeField(auto_now_add=True)
 
+    def accept(self):
+        with transaction.atomic():
+            contact = Contact.objects.create(user_from=self.sender, user_to=self.receiver)
+            self.delete()
+        return contact
+
+    def deny(self):
+        self.delete()
 
     def __str__(self) -> str:
         return self.name
 
 
 class User(AbstractUser):
-    
-    
     def upload_to(self, filename) -> str:
         return f'users/{self.id}/{filename}'
     
@@ -41,10 +58,7 @@ class User(AbstractUser):
         )
     ])
     email = models.EmailField(help_text='Requirerd. Email address', unique=True)
-    # contacts = models.ManyToManyField('self', symmetrical=True, related_name='related_contacts')
-    # contact_requests_received = models.ManyToManyField(ContactRequest, related_name='contact_requests_received')
-    # contact_requests_sent = models.ManyToManyField(ContactRequest, related_name='contact_requests_sent')
-
+   
     def __str__(self) -> str:
         return self.username
 
