@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from api.serializers.group_serializer import *
 from api.models import Contact
-from api.serializers.contact_serializer import ContactSerializer
+from api.serializers.contact_serializer import ContactSerializer, ContactListSerializer
 
 class ContactListPagination(PageNumberPagination):
     page_size = 15
@@ -28,11 +28,16 @@ class ContactListPagination(PageNumberPagination):
 class ContactListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = ContactListPagination
-    serializer_class = ContactSerializer
+    serializer_class = ContactListSerializer
 
     def get_queryset(self):
         user = self.request.user
         return Contact.objects.filter(user_from=user).union(Contact.objects.filter(user_to=user))
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
     
     
 class ContactDetailsView(generics.RetrieveDestroyAPIView):
